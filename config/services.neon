@@ -1,0 +1,13 @@
+services:
+	- App\Core\RouterFactory::createRouter
+	customTranslator: App\Model\CustomTranslator(defaultLang: %defaultLang%)
+	translatorExtension : Latte\Essential\TranslatorExtension(translator: @customTranslator)
+	nette.latteFactory:
+		setup:
+			- addExtension(@translatorExtension,[@customTranslator,'translate'])
+
+search:
+	-	in: %appDir%
+		classes:
+			- *Factory
+			- *Model

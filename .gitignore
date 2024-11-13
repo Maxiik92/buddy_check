@@ -1,0 +1,4 @@
+config/database.neon
+log/*
+temp/*
+vendor/*

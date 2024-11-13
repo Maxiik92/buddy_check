@@ -1,0 +1,7 @@
+CREATE TABLE `translate` (
+  `id` INT (11) NOT NULL AUTO_INCREMENT,
+  `key` VARCHAR(100) NOT NULL,
+  `language` VARCHAR(10) NOT NULL,
+  `value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = INNODB;
