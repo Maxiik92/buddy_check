@@ -1,1 +1,71 @@
-Register formular
+{block content}
+  <link href="{$basePath}/css/Register/register.css" rel="stylesheet" >
+  <div class="main">
+    <div class="container">
+      <div class="center">
+        <div n:snippet="form">
+          {form form}
+            <div class="mb-3">
+                <label class="form-label" n:name="username">User name</label>
+                <input n:name="username" id="username" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError username}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="email">E-mail</label>
+                <input n:name="email" id="email" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError email}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="firstName">First name</label>
+                <input n:name="firstName" id="firstName" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError firstName}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="middleName">Middle name</label>
+                <input n:name="middleName" id="middleName" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError middleName}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="lastName">Last name</label>
+                <input n:name="lastName" id="lastName" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError lastName}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="password">Password</label>
+                <input n:name="password" id="password" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError password}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" n:name="passwordConfirm">Confirm Password</label>
+                <input n:name="passwordConfirm" id="passwordConfirm" class="form-control">
+                <div class="invalid-feedback error n:ifcontent">
+                    {inputError passwordConfirm}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          {/form}
+
+        </div>
+      </div>
+    </div>
+  </div>
+{/block}
