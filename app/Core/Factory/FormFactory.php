@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\Factory;
 
 use Nette\Application\UI\Form;
 use Nette\Localization\Translator;

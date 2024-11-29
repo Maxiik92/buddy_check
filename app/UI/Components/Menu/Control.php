@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace App\UI\Components\Menu;
+use App\Core\Factory\UtilityFactory;
 use Nette\Application\UI\Control as NetteControl;
 
 use Nette\Security\User;
@@ -11,12 +12,14 @@ class Control extends NetteControl
   use SmartObject;
 
   public function __construct(
-    private User $user
+    private User $user,
+    private UtilityFactory $utilityFactory,
   ) {
   }
 
   public function render(): void
   {
+    $this->template->cssFilePath = $this->utilityFactory->getFilePathIfExists("/css/Components/Menu/menu.css");
     $this->template->setFile(__DIR__ . "/default.latte")->render();
   }
 }

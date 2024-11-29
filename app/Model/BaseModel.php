@@ -6,6 +6,7 @@ namespace App\Model;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Database\Explorer;
+use Nette\Database\Table\ActiveRow;
 use Nette\SmartObject;
 use Nette\DI\Attributes\Inject;
 
@@ -21,7 +22,7 @@ abstract class BaseModel
 
   public abstract function getTableName(): string;
 
-  public function getTable()
+  protected function getTable()
   {
     return $this->database->table($this->getTableName());
   }
@@ -33,6 +34,23 @@ abstract class BaseModel
     } else {
       return $this->cache;
     }
+  }
+
+  public function insert($data): ActiveRow|bool|int
+  {
+    return $this->getTable()->insert($data);
+  }
+
+  protected function valueExistsInTable(string $column, mixed $value)
+  {
+    $data = $this->getTable()
+      ->select('id')
+      ->where($column, $value)
+      ->fetch();
+    if ($data) {
+      return true;
+    }
+    return false;
   }
 
 }

@@ -20,4 +20,16 @@ class UserModel extends BaseModel
   {
     return 'user';
   }
+
+  public function isUserNameTaken(string $username): bool
+  {
+    return $this->valueExistsInTable('username', $username);
+  }
+
+  public function isEmailTaken(string $email): bool
+  {
+    return $this->valueExistsInTable('email', $email);
+  }
+
+
 }

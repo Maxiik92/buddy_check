@@ -33,6 +33,6 @@ class CustomTranslator implements Translator
     } else if ($mess == null) {
       return '';
     }
-    return $mess->$defaultLang;
+    return $mess->$defaultLang ?? $message;
   }
 }

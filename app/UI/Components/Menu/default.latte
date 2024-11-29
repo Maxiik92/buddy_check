@@ -1,28 +1,39 @@
-{if $user->isLoggedIn()}
-  je prihlaseny
-{else}
-  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
-    {_"login"}
-  </button>
-  <a href="{plink :User:Register:default}" role="button" class="btn btn-primary btn-lg">
-    {_"register"}
-  </a>
-  <!-- Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="loginModalLabel">{_"login"}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_"Close"}</button>
-        <button type="button" class="btn btn-primary">{_"Save changes"}</button>
+<div id="user-menu">
+  {if $cssFilePath}
+    <link href="{$cssFilePath}" rel="stylesheet">
+  {/if}
+  {if $user->isLoggedIn()}
+    je prihlaseny
+  {else}
+    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
+      {_"login"}
+    </button>
+    {if !$presenter->isLinkCurrent(':User:Register:default')}
+      <a href="{plink :User:Register:default}" role="button" class="btn btn-primary btn-lg">
+        {_"signup"}
+      </a>
+    {else}
+      <a href='/' role="button" class="btn btn-primary btn-lg">
+        {_'homepage'|firstUpper}
+      </a>
+    {/if}
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="loginModalLabel">{_"login"}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_"Close"}</button>
+          <button type="button" class="btn btn-primary">{_"Save changes"}</button>
+        </div>
       </div>
     </div>
   </div>
+  {/if}
 </div>
-{/if}
