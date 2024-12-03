@@ -17,6 +17,7 @@ use stdClass;
 final class RegisterPresenter extends BasePresenter
 {
   use SmartObject;
+  const MIN_PASS_LENGTH = 8;
   public function __construct(
     private FormFactory $formFactory,
     private UserModel $userModel,
@@ -26,6 +27,7 @@ final class RegisterPresenter extends BasePresenter
 
   public function renderDefault(): void
   {
+    $this->template->passwordRequirements = $this->t('passMinLength') . ': ' . self::MIN_PASS_LENGTH . '. ' . $this->t('passRequirements') . '.';
   }
 
   public function createComponentForm(): Form
@@ -63,8 +65,8 @@ final class RegisterPresenter extends BasePresenter
 
     $form->addPassword('password', 'Password')
       ->setRequired($requiredMsg)
-      ->addRule($form::MinLength, $this->t('Your password has to be at least %d long'), 8)
-      ->addRule($form::Pattern, $this->t('Must contain number'), '.*[0-9].*')
+      ->addRule($form::MinLength, $this->t('passMinLength') . ': ' . self::MIN_PASS_LENGTH, self::MIN_PASS_LENGTH)
+      ->addRule($form::Pattern, $this->t('passRequirements'), '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$')
       ->setHtmlAttribute('class', 'form-control')
       ->setHtmlAttribute('placeholder', "{$enter} {$this->t('password')}");
 
@@ -104,12 +106,13 @@ final class RegisterPresenter extends BasePresenter
         'password' => $resPass
       ];
       $this->userModel->insert($insert);
-      $this->flashMessage($this->t('Registration successful! Please sign in.'), 'success');
-      $this->redirect('Sign:in');
     } catch (Exception $e) {
       $form->addError($this->t('An error occurred during registration. Please try again later.'));
       // $this->logger->error('Registration error: ' . $e->getMessage());
+      $this->redirect($this);
     }
+    $this->flashMessage($this->t('Registration successful! Please sign in.'), 'success');
+    $this->redirect(':Front:Home:default');
   }
 
   public function checkUniqueInputs(stdClass $data)
@@ -122,5 +125,16 @@ final class RegisterPresenter extends BasePresenter
       $output[] = $this->t('emailTaken');
     }
     return $output;
+  }
+
+  public function handleCheckUnique(string $field, string $value)
+  {
+    $response = [];
+    if ($field === 'username' && $this->userModel->isUserNameTaken($value)) {
+      $response['error'] = $this->t('usernameTaken');
+    } elseif ($field === 'email' && $this->userModel->isEmailTaken($value)) {
+      $response['error'] = $this->t('emailTaken');
+    }
+    $this->sendJson($response);
   }
 }

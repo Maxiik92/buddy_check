@@ -18,9 +18,7 @@ final class RouterFactory
     $router
       ->withModule('User') //prefix modulu aby sa nemusel pisat do kazdej cesty
       ->withPath('user')
-      ->addRoute('register', 'Register:default')
-      ->addRoute('<presenter>/<action>', 'Home:default');
-
+      ->addRoute('register', 'Register:default');
     return $router;
   }
 }

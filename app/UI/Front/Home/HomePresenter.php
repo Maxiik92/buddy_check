@@ -10,8 +10,8 @@ use Nette\SmartObject;
 final class HomePresenter extends BasePresenter
 {
   use SmartObject;
+
   public function __construct()
   {
-    $t = 'hejpic';
   }
 }

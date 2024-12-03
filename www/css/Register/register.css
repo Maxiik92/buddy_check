@@ -15,6 +15,14 @@
 
     .center {
       width: 69%;
+
+      .invalid-feedback {
+        display: none;
+      }
+
+      .is-invalid + .invalid-feedback {
+        display: block;
+      }
     }
     .side-content {
       height: 75%;

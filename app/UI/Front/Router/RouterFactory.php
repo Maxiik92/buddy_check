@@ -17,9 +17,7 @@ final class RouterFactory
     $router = new RouteList;
     $router
       ->withModule('Front') //prefix modulu aby sa nemusel pisat do kazdej cesty
-      ->addRoute('/', 'Home:default')
-      ->addRoute('<presenter>/<action>', 'Home:default');
-
+      ->addRoute('/', 'Home:default');
     return $router;
   }
 }

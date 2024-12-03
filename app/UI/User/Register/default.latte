@@ -8,16 +8,16 @@
           {form form}
             <div class="col-md-6">
                 <label class="form-label" n:name="username">{_"username"|firstUpper}</label>
-                <input n:name="username" id="username" class="form-control">
-                <div class="invalid-feedback error n:ifcontent">
+                <input n:name="username" id="username" class="form-control" data-field="username">
+                <div id="username-error" class="invalid-feedback error n:ifcontent">
                     {inputError username}
                 </div>
             </div>
 
             <div class="col-md-6">
                 <label class="form-label" n:name="email">{_"email"|firstUpper}</label>
-                <input n:name="email" id="email" class="form-control">
-                <div class="invalid-feedback error n:ifcontent">
+                <input n:name="email" id="email" class="form-control" data-field="email">
+                <div id="email-error" class="invalid-feedback error n:ifcontent">
                     {inputError email}
                 </div>
             </div>
@@ -47,7 +47,10 @@
             </div>
 
             <div class="col-md-6">
-                <label class="form-label" n:name="password">{_"password"|firstUpper}</label>
+                <label class="form-label" n:name="password" title="{$passwordRequirements}">
+                  {_"password"|firstUpper}
+                  <i class="fa-solid fa-circle-info"></i>
+                </label>
                 <input n:name="password" id="password" class="form-control">
                 <div class="invalid-feedback error n:ifcontent">
                     {inputError password}
@@ -62,7 +65,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="col-md-4 btn btn-primary">{_"signup"|firstUpper}</button>
+            <button disabled type="submit" class="col-md-4 btn btn-primary">{_"signup"|firstUpper}</button>
           {/form}
         </div>
       </div>
@@ -70,4 +73,46 @@
       </div>
     </div>
   </div>
+{/block}
+{block scripts}
+  <script>
+      document.addEventListener('DOMContentLoaded',()=>{
+        const fields = document.querySelectorAll('[data-field]');
+        fields.forEach(field => {
+          field.addEventListener('blur',function (){
+            const fieldType = this.getAttribute('data-field');
+            const fieldValue = this.value;
+
+            if(!fieldValue.trim()){
+              return;
+            }
+            
+            fetch(`?do=checkUnique&field=${ fieldType}&value=${ fieldValue}`)
+              .then(res => res.json())
+              .then(data => {
+                const errorDiv = document.querySelector(`#${ fieldType}-error`);
+                if(data.error){
+                  errorDiv.textContent = data.error;
+                  errorDiv.style.display = 'block';
+                  this.classList.add('is-invalid');
+                }else{
+                  errorDiv.textContent = '';
+                  errorDiv.style.display = 'none';
+                  this.classList.remove('is-invalid');
+                }
+              })
+              .catch(error => {
+                console.error('Error:',error);
+              })
+          })
+        })
+      })
+
+      const form = document.querySelector('form');
+      const submitButton = form.querySelector('[type="submit"]');
+
+      form.addEventListener('change', function () {
+          submitButton.disabled = !form.checkValidity();
+      });
+  </script>
 {/block}

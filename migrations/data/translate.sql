@@ -30,4 +30,8 @@ INSERT INTO `translate` (`key`,`language`,`value`) VALUES
 ('usernameTaken','sk','Používateľské meno sa už používa'),
 ('usernameTaken','en','Username already taken'),
 ('emailTaken','sk','Daný e-mail sa už používa.'),
-('emailTaken','en','Email already in use');
+('emailTaken','en','Email already in use'),
+('passMinLength','sk','Minimálna dĺžka hesla'),
+('passMinLength','en','Minimum length of password'),
+('passRequirements','sk','Musí obsahovať aspon jedno číslo, jedno malé a jedno veľké písmeno'),
+('passRequirements','en','Must contain at least one number, one lowercase letter, and one uppercase letter');
