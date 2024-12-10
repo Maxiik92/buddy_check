@@ -1,0 +1,11 @@
+.pass-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  i {
+    position: absolute;
+    right: 30px;
+    cursor: pointer;
+  }
+}

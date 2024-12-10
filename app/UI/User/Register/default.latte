@@ -47,11 +47,14 @@
             </div>
 
             <div class="col-md-6">
-                <label class="form-label" n:name="password" title="{$passwordRequirements}">
+                <label class="form-label" n:name="password" data-toggle="tooltip" data-placement="top" title="{$passwordRequirements}">
                   {_"password"|firstUpper}
                   <i class="fa-solid fa-circle-info"></i>
                 </label>
-                <input n:name="password" id="password" class="form-control">
+                <div class='pass-input'>
+                  <input n:name="password" id="password" class="form-control">
+                  <i class="far fa-eye-slash togglePassword"></i>
+                </div>
                 <div class="invalid-feedback error n:ifcontent">
                     {inputError password}
                 </div>
@@ -59,13 +62,16 @@
 
             <div class="col-md-6">
                 <label class="form-label" n:name="passwordConfirm">{_"confirm"|firstUpper} {_"password"|firstUpper}</label>
-                <input n:name="passwordConfirm" id="passwordConfirm" class="form-control">
+                <div class='pass-input'>
+                  <input n:name="passwordConfirm" id="passwordConfirm" class="form-control">
+                  <i class="far fa-eye-slash togglePassword"></i>
+                </div>
                 <div class="invalid-feedback error n:ifcontent">
                     {inputError passwordConfirm}
                 </div>
             </div>
 
-            <button disabled type="submit" class="col-md-4 btn btn-primary">{_"signup"|firstUpper}</button>
+            <button type="submit" class="col-md-4 btn btn-primary">{_"signup"|firstUpper}</button>
           {/form}
         </div>
       </div>
@@ -81,7 +87,7 @@
         fields.forEach(field => {
           field.addEventListener('blur',function (){
             const fieldType = this.getAttribute('data-field');
-            const fieldValue = this.value;
+            const fieldValue = encodeURIComponent(this.value);
 
             if(!fieldValue.trim()){
               return;
@@ -99,6 +105,7 @@
                   errorDiv.textContent = '';
                   errorDiv.style.display = 'none';
                   this.classList.remove('is-invalid');
+                  errorDiv.previousElementSibling.setCustomValidity('');
                 }
               })
               .catch(error => {
@@ -108,11 +115,5 @@
         })
       })
 
-      const form = document.querySelector('form');
-      const submitButton = form.querySelector('[type="submit"]');
-
-      form.addEventListener('change', function () {
-          submitButton.disabled = !form.checkValidity();
-      });
   </script>
 {/block}

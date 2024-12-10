@@ -35,7 +35,7 @@ final class RegisterPresenter extends BasePresenter
     $form = $this->formFactory->create();
 
     $form->getElementPrototype()
-      ->setAttribute("class", "row g-3 needs-validation ajax");
+      ->setAttribute("class", "row g-3 needs-validation ajax needs-validation");
 
     $requiredMsg = 'Please enter %label';
     $enter = ucfirst($this->t('enter'));

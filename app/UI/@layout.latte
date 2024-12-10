@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 	<script defer src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 	<script defer src="{$basePath}/js/flashMessage.js"></script>
+	<script defer src="{$basePath}/js/bootstrapformValidation.js"></script>
 
 </head>
 
@@ -26,14 +27,18 @@
 	{include content}
 
 	{block scripts}
+	{/block}
 	<script src="https://unpkg.com/nette-forms@3"></script>
 	<script>
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
-	})
+		document.addEventListener('DOMContentLoaded', function () {
+				// Select all elements with the data-toggle="tooltip" attribute
+				const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+				// Initialize tooltips for each element
+				tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+						new bootstrap.Tooltip(tooltipTriggerEl);
+				});
+		});
 	</script>
-	{/block}
-
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
