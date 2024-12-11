@@ -1,5 +1,8 @@
 #user-menu {
-  position: absolute;
+  position: fixed;
   right: 10px;
   top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
 }

@@ -1,0 +1,7 @@
+CREATE TABLE `config` (
+  `id` INT (11) NOT NULL AUTO_INCREMENT,
+  `key` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(255),
+  `value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = INNODB;

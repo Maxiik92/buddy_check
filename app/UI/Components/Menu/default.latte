@@ -25,13 +25,26 @@
           <h1 class="modal-title fs-5" id="loginModalLabel">{_"login"}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_"Close"}</button>
-          <button type="button" class="btn btn-primary">{_"Save changes"}</button>
-        </div>
+          {form loginForm}
+            <div class="modal-body">
+              <div class="col-md-8">
+                  <label class="form-label" n:name="usernameemail">{_"username"|firstUpper} / {_"email"|firstUpper}</label>
+                  <input n:name="usernameemail" id="usernameemail" class="form-control" data-field="username-email">
+              </div>
+              <div class="col-md-8">
+                  <label class="form-label" n:name="password">
+                    {_"password"|firstUpper}
+                  </label>
+                  <div class='pass-input'>
+                    <input n:name="password" id="password" class="form-control">
+                    <i class="far fa-eye-slash togglePassword"></i>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">{_"login"}</button>
+            </div>
+          {/form}
       </div>
     </div>
   </div>

@@ -7,15 +7,9 @@
 namespace App\Model;
 
 use App\Model\BaseModel;
-use Nette\Database\Explorer;
 
 class UserModel extends BaseModel
 {
-  public function __construct(Explorer $database)
-  {
-    parent::__construct($database);
-  }
-
   public function getTableName(): string
   {
     return 'user';

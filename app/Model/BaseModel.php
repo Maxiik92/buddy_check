@@ -7,6 +7,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 use Nette\SmartObject;
 use Nette\DI\Attributes\Inject;
 
@@ -51,6 +52,16 @@ abstract class BaseModel
       return true;
     }
     return false;
+  }
+
+  public function getByParameter(string $column, string $value, ?array $columns = null): Selection
+  {
+    $data = $this->getTable();
+    if ($columns) {
+      $data = $data->select(implode($columns));
+    }
+    $data = $data->where($column, $value);
+    return $data;
   }
 
 }

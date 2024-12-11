@@ -8,16 +8,10 @@ namespace App\Model;
 
 use App\Model\BaseModel;
 use Nette\Caching\Cache;
-use Nette\Database\Explorer;
 
 class TranslateModel extends BaseModel
 {
   protected ?Cache $cache = null;
-
-  public function __construct(Explorer $database)
-  {
-    parent::__construct($database);
-  }
 
   public function getTableName(): string
   {

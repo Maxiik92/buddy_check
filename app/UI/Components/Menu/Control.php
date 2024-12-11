@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\UI\Components\Menu;
 use App\Core\Factory\FormFactory;
 use App\Core\Factory\UtilityFactory;
+use Exception;
 use Nette\Application\UI\Control as NetteControl;
 
 use Nette\Application\UI\Form;
@@ -31,9 +32,9 @@ class Control extends NetteControl
   {
     $form = $this->formFactory->create();
     $form->getElementPrototype()
-      ->setAttribute("class", "row ajax");
+      ->setAttribute("class", "row ajax center-form");
 
-    $form->addText("username", 'Username')
+    $form->addText("usernameemail", 'Username/Email')
       ->setRequired($this->presenter->t('usernameRequired'))
       ->setHtmlAttribute('class', 'form-control');
 
@@ -50,6 +51,21 @@ class Control extends NetteControl
 
   public function onSuccess(Form $form, stdClass $values)
   {
+    try {
+      $this->presenter->getUser()->login($values->usernameemail, $values->password);
 
+      if ($this->presenter->getUser()->isLoggedIn()) {
+        //LOG
+        $this->flashMessage('loginSuccess', 'success');
+        $this->redirect('this');
+      } else {
+        $this->flashMessage('loginFail', 'danger');
+        $this->redirect('this');
+      }
+    } catch (Exception $e) {
+      //LOG
+      $this->flashMessage('loginFail', 'danger');
+      $this->redirect('this');
+    }
   }
 }

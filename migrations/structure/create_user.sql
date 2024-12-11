@@ -11,4 +11,4 @@ CREATE TABLE `user` (
   `deleted` INT(1) NOT NULL DEFAULT 0,
   `last_login` DATETIME,
   PRIMARY KEY (`id`) 
-);
+)ENGINE=InnoDB;

@@ -1,5 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
+	authenticator: App\Core\Security\UserAuthenticator
 	customTranslator: App\Model\CustomTranslator(defaultLang: %defaultLang%)
 	translatorExtension : Latte\Essential\TranslatorExtension(translator: @customTranslator)
 	nette.latteFactory:

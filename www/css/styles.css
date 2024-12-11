@@ -9,3 +9,8 @@
     cursor: pointer;
   }
 }
+
+.center-form {
+  justify-content: center;
+  gap: 1em;
+}
