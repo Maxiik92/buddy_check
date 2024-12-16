@@ -1,0 +1,51 @@
+<div id="login-menu">
+  {if $user->isLoggedIn()}
+    je prihlaseny
+  {else}
+    <div class="btn-group" role="group">
+      {if !$presenter->isLinkCurrent(':User:Register:default')}
+        <a href="{plink :User:Register:default}" role="button" class="btn btn-primary">
+          {_"signup"}
+        </a>
+      {else}
+        <a href='/' role="button" class="btn btn-primary">
+          {_'homepage'|firstUpper}
+        </a>
+      {/if}
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+        {_"login"}
+      </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="loginModalLabel">{_"login"}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          {form loginForm}
+            <div class="modal-body">
+              <div class="col-md-8">
+                  <label class="form-label" n:name="username">{_"username"|firstUpper} / {_"email"|firstUpper}</label>
+                  <input n:name="username" id="username" class="form-control" data-field="username-email">
+              </div>
+              <div class="col-md-8">
+                  <label class="form-label" n:name="password">
+                    {_"password"|firstUpper}
+                  </label>
+                  <div class='pass-input'>
+                    <input n:name="password" id="password" class="form-control">
+                    <i class="far fa-eye-slash togglePassword"></i>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">{_"login"}</button>
+            </div>
+          {/form}
+        </div>
+      </div>
+    </div>
+  {/if}
+</div>
