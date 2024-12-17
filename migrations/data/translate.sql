@@ -35,3 +35,7 @@ INSERT INTO `translate` (`key`,`language`,`value`) VALUES
 ('passMinLength','en','Minimum length of password'),
 ('passRequirements','sk','Musí obsahovať aspon jedno číslo, jedno malé a jedno veľké písmeno'),
 ('passRequirements','en','Must contain at least one number, one lowercase letter, and one uppercase letter');
+('hi','sk','ahoj'),
+('hi','en','hi'),
+('logout','sk','odhlásiť'),
+('logout','en','log out');

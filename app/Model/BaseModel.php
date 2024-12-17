@@ -64,5 +64,16 @@ abstract class BaseModel
     return $data;
   }
 
+  public function getByColumn(string $column, mixed $value): Selection
+  {
+    return $this->getTable()->where($column, $value);
+  }
+
+  public function updateByParam(string $column, mixed $value, array $update)
+  {
+    $result = $this->getByColumn($column, $value)->update($update);
+    return $result;
+  }
+
 }
 

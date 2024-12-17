@@ -1,6 +1,6 @@
 <div id="login-menu">
   {if $user->isLoggedIn()}
-    je prihlaseny
+    {control loggedInMenu}
   {else}
     <div class="btn-group" role="group">
       {if !$presenter->isLinkCurrent(':User:Register:default')}

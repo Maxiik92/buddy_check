@@ -4,6 +4,7 @@ namespace App\UI\Components\Menu\LoginMenu;
 
 use App\Core\Factory\FormFactory;
 use App\Core\Factory\UtilityFactory;
+use App\Model\UserModel;
 use Exception;
 use Nette\Application\UI\Control as NetteControl;
 
@@ -11,6 +12,7 @@ use Nette\Application\UI\Form;
 use Nette\Security\User;
 use Nette\SmartObject;
 use stdClass;
+use App\UI\Components\Menu\LoginMenu\LoggedInMenu\ControlFactory as LoggedInMenuControlFactory;
 
 class Control extends NetteControl
 {
@@ -20,6 +22,8 @@ class Control extends NetteControl
     private User $user,
     private UtilityFactory $utilityFactory,
     private FormFactory $formFactory,
+    private LoggedInMenuControlFactory $loggedInMenuControlFactory,
+    private UserModel $userModel,
   ) {
   }
 
@@ -58,6 +62,7 @@ class Control extends NetteControl
 
       if ($this->presenter->getUser()->isLoggedIn()) {
         //LOG
+        $this->userModel->updateByParam('id', $this->presenter->getUser()->getId(), ['logged' => 1, 'last_login' => date('Y-m-d H:i:s')]);
         $this->flashMessage('loginSuccess', 'success');
         $this->redirect('this');
       } else {
@@ -69,5 +74,10 @@ class Control extends NetteControl
       $this->flashMessage('loginFail', 'danger');
       $this->redirect('this');
     }
+  }
+
+  public function createComponentLoggedInMenu()
+  {
+    return $this->loggedInMenuControlFactory->create($this->user);
   }
 }

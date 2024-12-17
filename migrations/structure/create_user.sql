@@ -10,5 +10,6 @@ CREATE TABLE `user` (
   `updated` DATETIME,
   `deleted` INT(1) NOT NULL DEFAULT 0,
   `last_login` DATETIME,
+  `logged` TINYINT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`) 
 )ENGINE=InnoDB;
