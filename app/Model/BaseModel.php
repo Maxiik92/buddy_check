@@ -21,9 +21,9 @@ abstract class BaseModel
   ) {
   }
 
-  public abstract function getTableName(): string;
+  protected abstract function getTableName(): string;
 
-  protected function getTable()
+  public function getTable()
   {
     return $this->database->table($this->getTableName());
   }

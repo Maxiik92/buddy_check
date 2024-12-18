@@ -1,6 +1,7 @@
 CREATE TABLE `role` (  
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100),
+  `parent_id` INT(11) DEFAULT NULL,
   PRIMARY KEY (`id`) 
 )ENGINE=InnoDB;
 

@@ -38,4 +38,6 @@ INSERT INTO `translate` (`key`,`language`,`value`) VALUES
 ('hi','sk','ahoj'),
 ('hi','en','hi'),
 ('logout','sk','odhlásiť'),
-('logout','en','log out');
+('logout','en','log out'),
+('unauthorized','sk','Nemáte oprávnenie vykonať túto akciu.'),
+('unauthorized','en','Unauthorized for this action.');
