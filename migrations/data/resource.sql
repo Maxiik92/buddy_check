@@ -1,6 +1,5 @@
 INSERT INTO `acl_resource` (`name`) VALUES
-('user'),
-('profile');
+('user');
 
 INSERT INTO `acl_action` (`name`) VALUES
 ('view'),

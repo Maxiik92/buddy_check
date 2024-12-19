@@ -1,4 +1,9 @@
-const notyf = new Notyf();
+const notyf = new Notyf({
+  position: {
+    x: "right",
+    y: "top",
+  },
+});
 const flashContainer = document.getElementById("flash-messages");
 const flashes = flashContainer
   ? JSON.parse(flashContainer.dataset.flashes)
@@ -9,6 +14,7 @@ flashes.forEach((flash) => {
     case "success":
       notyf.success(flash.message);
       break;
+    case "danger":
     case "error":
       notyf.error(flash.message);
       break;
@@ -17,7 +23,7 @@ flashes.forEach((flash) => {
         type: "info",
         message: flash.message,
         background: "#3b82f6",
-        icon: flashes,
+        icon: '<i class="fa-solid fa-circle-info"></i>',
       });
       break;
     default:

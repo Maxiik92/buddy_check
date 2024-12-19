@@ -54,6 +54,11 @@ abstract class BaseModel
     return false;
   }
 
+  public function getById(string|int $id): ActiveRow|bool|int
+  {
+    return $this->getTable()->where('id', $id)->fetch();
+  }
+
   public function getByParameter(string $column, string $value, ?array $columns = null): Selection
   {
     $data = $this->getTable();

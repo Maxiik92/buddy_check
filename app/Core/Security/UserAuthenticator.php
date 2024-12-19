@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Security;
 
+use App\Model\RoleModel;
 use App\Model\UserModel;
 use App\UI\Trait\TranslatorTrait;
 use Nette\Security\AuthenticationException;
@@ -16,7 +17,7 @@ class UserAuthenticator implements Authenticator
 {
   use TranslatorTrait;
 
-  public function __construct(private UserModel $userModel, private Passwords $passwords)
+  public function __construct(private UserModel $userModel, private RoleModel $roleModel, private Passwords $passwords)
   {
   }
 
@@ -37,19 +38,25 @@ class UserAuthenticator implements Authenticator
     } else {
       $user = $byUserName;
     }
-    $user = $user->related('user_x_role')->fetch();
 
-    if (!$this->passwords->verify($password, $user->user->password)) {
+    if ($user->deleted == 1) {
+      throw new AuthenticationException($this->t('userDeleted'));
+    }
+
+    if (!$this->passwords->verify($password, $user->password)) {
       throw new AuthenticationException($this->t('incorrectPassword'));
     }
 
+    $this->userModel->updateByParam('id', $user->id, ['logged' => 1]);
+
+    $userData = $user->toArray();
+    $userData['logged'] = 1;
+    unset($userData['password']);
+
     return new SimpleIdentity(
-      $user->user->id,
-      $user->role->name,
-      [
-        'name' => implode(' ', [$user->user->first_name, $user->user->middle_name, $user->user->last_name]),
-        'email' => $user->user->email,
-      ]
+      $user->id,
+      $this->roleModel->findAllByUserIdAsEntity($user->id),
+      $userData
     );
   }
 }
