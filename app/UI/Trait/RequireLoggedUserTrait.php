@@ -10,7 +10,7 @@ trait RequireLoggedUserTrait
   public function injectRequireLoggedUser()
   {
     $this->onStartup[] = function () {
-      if (!$this->getUser()->isAllowed($this->resource, 'view')) {
+      if (!$this->getUser()->isLoggedIn()) {
         $this->flashMessage($this->t('unauthorized'), 'danger');
         $this->redirect(':Front:Home:default');
       }

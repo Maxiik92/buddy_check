@@ -14,7 +14,6 @@ class AuthorizatorFactory
   private Permission $permission;
   private Cache $cache;
 
-
   public function __construct(
     private RoleModel $roleModel,
     private AclPermissionModel $aclPermissionModel,
@@ -75,9 +74,13 @@ class AuthorizatorFactory
     $permissions = $this->getPermissions();
     $this->permission->deny('guest');
     foreach ($permissions as $permission) {
-      $this->permission->allow($permission->role, $permission->resource, $permission->action);
+      $assertion = null;
+      if ($permission->assertion) {
+        $assertion = [self::class, "{$permission->assertion}"];
+      }
+      $this->permission->allow($permission->role, $permission->resource, $permission->action, $assertion);
     }
-    $this->permission->allow('admin', Authorizator::All, Authorizator::All);
+    $this->permission->allow('admin', Authorizator::All, Authorizator::All, null);
   }
 
   private function getActiveRoles(): stdClass
@@ -108,10 +111,17 @@ class AuthorizatorFactory
     $key = "authorizatorPermissions";
     return $this->cache->load($key, function (&$dependencies) {
       $data = $this->aclPermissionModel->getTable()
-        ->select("role.name AS role, resource.name AS resource, action.name AS action")
+        ->select("role.name AS role, resource.name AS resource, action.name AS action, assertion")
         ->fetchAll();
 
       return $this->utilityFactory->createObjectFromMultipleResults($data) ?? null;
     });
+  }
+
+  public static function checkUserResource(Permission $acl, string $role, string $resource, string $privilege)
+  {
+    $role = $acl->getQueriedRole(); // object Registered
+    $resource = $acl->getQueriedResource(); // object Article
+    return $role->getUserId() === $resource->id;
   }
 }

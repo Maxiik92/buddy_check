@@ -6,6 +6,7 @@ namespace App\UI\User\Register;
 
 use App\Core\Factory\FormFactory;
 use App\Model\UserModel;
+use App\Model\UserRoleModel;
 use App\UI\Front\BasePresenter;
 use Exception;
 use Nette\Application\UI\Form;
@@ -21,6 +22,7 @@ final class RegisterPresenter extends BasePresenter
   public function __construct(
     private FormFactory $formFactory,
     private UserModel $userModel,
+    private UserRoleModel $userRoleModel,
     private Passwords $passwords
   ) {
   }
@@ -86,17 +88,18 @@ final class RegisterPresenter extends BasePresenter
 
   public function onSuccess(Form $form, stdClass $data)
   {
+    $uniqueChecker = $this->checkUniqueInputs($data);
+
+    if (!empty($uniqueChecker)) {
+      $this->flashMessage(implode('. ', $uniqueChecker), 'error');
+      return;
+    }
+
+    $passwords = new Passwords(PASSWORD_BCRYPT, ['cost' => 12]);
+    $resPass = $passwords->hash($data->password);
+
+    $this->userModel->beginTransaction();
     try {
-      $uniqueChecker = $this->checkUniqueInputs($data);
-
-      if (!empty($uniqueChecker)) {
-        $this->flashMessage(implode('. ', $uniqueChecker), 'error');
-        return;
-      }
-
-      $passwords = new Passwords(PASSWORD_BCRYPT, ['cost' => 12]);
-      $resPass = $passwords->hash($data->password);
-
       $insert = [
         'username' => $data->username,
         'email' => $data->email,
@@ -105,9 +108,16 @@ final class RegisterPresenter extends BasePresenter
         'last_name' => $data->lastName,
         'password' => $resPass
       ];
-      $this->userModel->insert($insert);
+      $user = $this->userModel->insert($insert);
+
+      $this->userRoleModel->insert([
+        'user_id' => $user->id,
+        'role_id' => $this->userRoleModel->getDefaultRoleId(),
+      ]);
+      $this->userModel->commit();
     } catch (Exception $e) {
       $form->addError($this->t('An error occurred during registration. Please try again later.'));
+      $this->userModel->rollBack();
       // $this->logger->error('Registration error: ' . $e->getMessage());
       $this->redirect($this);
     }

@@ -28,6 +28,21 @@ abstract class BaseModel
     return $this->database->table($this->getTableName());
   }
 
+  public function beginTransaction()
+  {
+    $this->database->beginTransaction();
+  }
+
+  public function commit()
+  {
+    $this->database->commit();
+  }
+
+  public function rollback()
+  {
+    $this->database->rollBack();
+  }
+
   protected function getCache(): Cache
   {
     if ($this->cache == null) {
