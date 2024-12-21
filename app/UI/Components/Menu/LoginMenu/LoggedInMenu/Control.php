@@ -38,7 +38,7 @@ class Control extends NetteControl
   public function handleLogout()
   {
     $this->userModel->updateByParam('id', $this->user->getId(), ['logged' => 0]);
-    $this->user->logout();
+    $this->user->logout(true);
     $this->presenter->redirect(':Front:Home:default');
   }
 

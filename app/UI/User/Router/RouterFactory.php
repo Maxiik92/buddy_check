@@ -18,7 +18,10 @@ final class RouterFactory
     $router
       ->withModule('User') //prefix modulu aby sa nemusel pisat do kazdej cesty
       ->withPath('user')
-      ->addRoute('register', 'Register:default');
+      ->addRoute('register', 'Register:default')
+      ->addRoute('edit[/<id>]', 'Manipulate:edit')
+      ->addRoute('create', 'Manipulate:add')
+      ->addRoute('<presenter>/<action>[/<id>]', '<presenter>:<action>'); // General dynamic route
     return $router;
   }
 }

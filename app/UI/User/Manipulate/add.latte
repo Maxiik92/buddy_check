@@ -1,11 +1,11 @@
 {block content}
   <link href="{$basePath}/css/Register/register.css" rel="stylesheet" >
   <div class="main">
-    <h1 n:block="title">{_"joinUs"}</h1>
+    <h1 n:block="title">{_"addUser"}</h1>
     <div class="container">
       <div class="center">
-        <div n:snippet="form">
-          {form form}
+        <div n:snippet="manipulateForm">
+          {form manipulateForm}
             {include '../Form/_userForm.latte'}
           {/form}
         </div>
@@ -16,5 +16,5 @@
   </div>
 {/block}
 {block scripts}
-    <script src="/js/userForm.js"></script>
+  <script src="/js/userForm.js"></script>
 {/block}
