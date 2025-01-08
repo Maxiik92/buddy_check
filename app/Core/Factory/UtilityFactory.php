@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core\Factory;
 
 use Nette\Database\Table\ActiveRow;
+use Nette\Security\User;
 use stdClass;
 
 class UtilityFactory
@@ -43,5 +44,20 @@ class UtilityFactory
       $itemArray[$key] = $row;
     }
     return (Object) $itemArray;
+  }
+
+  public function getFullUserName(User $user)
+  {
+    $userIdentity = $user->getIdentity();
+    if ($userIdentity) {
+      return trim(sprintf(
+        '%s %s %s',
+        $userIdentity->first_name ?? '',
+        $userIdentity->middle_name ?? '',
+        $userIdentity->last_name ?? ''
+      ));
+    } else {
+      return $userIdentity->username;
+    }
   }
 }

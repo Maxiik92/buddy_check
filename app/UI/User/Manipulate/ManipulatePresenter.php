@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\UI\User\Manipulate;
 
-use App\Core\Factory\FormFactory;
+use App\UI\User\Form\UserControlFormFactory;
 use App\Core\Trait\RequireLoggedUserTrait;
 use App\Model\UserModel;
 use App\UI\Front\BasePresenter;
 use App\UI\User\Trait\UserTrait;
+use Exception;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\ActiveRow;
 use Nette\Security\Passwords;
 use Nette\SmartObject;
+use Nette\Utils\DateTime;
 use stdClass;
 
 class ManipulatePresenter extends BasePresenter
@@ -27,7 +29,7 @@ class ManipulatePresenter extends BasePresenter
   private ActiveRow $userData;
 
   public function __construct(
-    private FormFactory $formFactory,
+    private UserControlFormFactory $formFactory,
     private UserModel $userModel,
     private Passwords $passwords,
   ) {
@@ -44,6 +46,7 @@ class ManipulatePresenter extends BasePresenter
       $this->checkPrivilege($this->userModel->toEntity($resource), 'edit');
       $this->userData = $resource;
       $this->id = $id;
+      $this->template->formUserId = $id;
     } else {
       $this->flashMessage($this->t('missingId'), 'danger');
       $this->redirect(':Front:Home:default');
@@ -67,54 +70,73 @@ class ManipulatePresenter extends BasePresenter
   public function createComponentManipulateForm(): Form
   {
     $form = $this->formFactory->create();
-    $form->getElementPrototype()
-      ->setAttribute("class", "row g-3");
-
-    $enter = ucfirst($this->t('enter'));
-    $form->addText("username", "Username")
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('username')}");
-
-    $form->addEmail('email', 'E-mail')
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('email')}");
-
-    $form->addText("firstName", "First name")
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('firstname')}");
-
-    $form->addText("middleName", "Middle name")
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('middlename')}");
-
-    $form->addText("lastName", "Last name")
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('lastname')}");
-
-    $form->addPassword('password', 'Password')
-      ->addRule($form::MinLength, $this->t('passMinLength') . ': ' . self::MIN_PASS_LENGTH, self::MIN_PASS_LENGTH)
-      ->addRule($form::Pattern, $this->t('passRequirements'), '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$')
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('password')}");
-
-    $confirm = ucfirst($this->t('confirm'));
-    $form->addPassword('passwordConfirm', 'Confirm password')
-      ->setRequired('Please confirm your password')
-      ->addRule($form::EQUAL, 'Password mismatch', $form['password'])
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$confirm} {$this->t('password')}");
-
-    $form->addSubmit('register', $this->t('signup'))
-      ->setHtmlAttribute('class', 'btn btn-primary');
 
     if (isset($this->userData)) {
+      $this->template->manipulateForm = true;
       $form->setDefaults($this->userData);
+    }
+    if ($this->action === 'edit') {
+      $form->getComponent('password')->setRequired(false);
+      $form->getComponent('passwordConfirm')->setRequired(false);
     }
     $form->onSuccess[] = [$this, 'onSuccess'];
     return $form;
   }
 
-  public function onSuccess(Form $form, stdClass $values)
+  public function onSuccess(Form $form, stdClass $data)
+  {
+    if (isset($data->id) && $data->id != '') {
+      $oldUser = $this->userModel->getById($data->id);
+      if ($oldUser) {
+        $this->editUser($form, $data, $oldUser);
+      } else {
+        $form->addError($this->t('userNotFound'));
+        $this->flashMessage($this->t('userNotFound'), 'danger');
+        $this->redirect('this');
+      }
+    } else {
+      $this->createUser($form, $data);
+    }
+
+  }
+
+  private function editUser(Form $form, stdClass $data, ActiveRow $oldData)
+  {
+    try {
+      $update = [];
+      unset($data->id);
+      if (!empty($data->password) && $data->password !== $data->passwordConfirm) {
+        $form->addError($this->t('passwordsDoNotMatch'));
+        $this->flashMessage($this->t('passwordsDoNotMatch'), 'danger');
+        $this->redirect('this');
+      }
+      unset($data->passwordConfirm);
+
+      foreach ($data as $item => $value) {
+        if ($item !== 'password') {
+          if ($value !== $oldData->{$item}) {
+            $update[$item] = $value;
+          }
+        } else {
+          if (isset($value) && $value !== '') {
+            $passwords = new Passwords(PASSWORD_BCRYPT, ['cost' => 12]);
+            $update['password'] = $passwords->hash($data->password);
+          }
+        }
+      }
+      if (!empty($update)) {
+        $update['updated'] = new DateTime();
+        $this->userModel->updateByParam('id', $oldData->id, $update);
+      }
+      $this->flashMessage($this->t('updateSuccessfull'), 'success');
+      $this->redirect('this');
+    } catch (Exception $e) {
+      $this->flashMessage($this->t('failedToEditUser'), 'danger');
+      $this->redirect('this');
+    }
+  }
+
+  private function createUser(Form $form, stdClass $data)
   {
   }
 }

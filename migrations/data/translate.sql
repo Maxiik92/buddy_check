@@ -40,4 +40,14 @@ INSERT INTO `translate` (`key`,`language`,`value`) VALUES
 ('logout','sk','odhlásiť'),
 ('logout','en','log out'),
 ('unauthorized','sk','Nemáte oprávnenie vykonať túto akciu.'),
-('unauthorized','en','Unauthorized for this action.');
+('unauthorized','en','Unauthorized for this action.'),
+('profile','sk','profil'),
+('profile','en','profile'),
+('editUser','sk','upraviť používateľa'),
+('editUser','en','edit user'),
+('createUser','sk','vytvoriť používateľa'),
+('createUser','en','create user'),
+('save','sk','uložiť'),
+('save','en','save'),
+('userNotFound','sk','Používateľ nenájdený'),
+('userNotFound','en','User not Found');

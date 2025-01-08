@@ -5,8 +5,8 @@
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
       {_"hi"|firstUpper}
-      {if $user->identity->name}
-        {$user->identity->name}
+      {if $fullName}
+        {$fullName}
       {else}
         {$user->identity->username}
       {/if}
@@ -16,7 +16,7 @@
   <div class="offcanvas-body">
     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
       <li class="nav-item">
-        <a n:class="isLinkCurrent() ? active, nav-link" aria-label="{_'editUser'|firstUpper}" href="{plink :User:Manipulate:edit $user->id}">{_"editUser"|firstUpper}</a>
+        <a n:class="isLinkCurrent() ? active, nav-link" aria-label="{_'editUser'|firstUpper}" href="{plink :User:Manipulate:edit $user->id}">{_"profile"|firstUpper}</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

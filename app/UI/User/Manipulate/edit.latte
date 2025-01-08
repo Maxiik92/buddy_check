@@ -1,16 +1,20 @@
 {block content}
   <link href="{$basePath}/css/Register/register.css" rel="stylesheet" >
   <div class="main">
-    <h1 n:block="title">{_"editUser"}</h1>
+    <h1 n:block="title">
+      {if $formUserId === $user->id}
+        {_"profile"|firstUpper}
+      {else}
+        {_"editUser"|capitalize}
+      {/if}
+    </h1>
     <div class="container">
-      <div class="center">
+      <div>
         <div n:snippet="manipulateForm">
           {form manipulateForm}
             {include '../Form/_userForm.latte'}
           {/form}
         </div>
-      </div>
-      <div class="side-content">
       </div>
     </div>
   </div>

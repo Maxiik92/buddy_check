@@ -27,6 +27,7 @@ class Control extends NetteControl
 
   public function render(): void
   {
+    $this->template->fullName = $this->utilityFactory->getFullUserName($this->user);
     $this->template->setFile(__DIR__ . "/default.latte")->render();
   }
 

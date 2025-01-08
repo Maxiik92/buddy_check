@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\User\Register;
 
-use App\Core\Factory\FormFactory;
+use App\UI\User\Form\UserControlFormFactory;
 use App\Model\UserModel;
 use App\Model\UserRoleModel;
 use App\UI\Front\BasePresenter;
@@ -21,7 +21,7 @@ final class RegisterPresenter extends BasePresenter
   use SmartObject;
   use UserTrait;
   public function __construct(
-    private FormFactory $formFactory,
+    private UserControlFormFactory $formFactory,
     private UserModel $userModel,
     private UserRoleModel $userRoleModel,
     private Passwords $passwords
@@ -44,52 +44,6 @@ final class RegisterPresenter extends BasePresenter
   {
     $form = $this->formFactory->create();
 
-    $form->getElementPrototype()
-      ->setAttribute("class", "row g-3 needs-validation ajax needs-validation");
-
-    $requiredMsg = 'Please enter %label';
-    $enter = ucfirst($this->t('enter'));
-    $form->addText("username", "Username")
-      ->setRequired($requiredMsg)
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('username')}");
-
-    $form->addEmail('email', 'E-mail')
-      ->setRequired($requiredMsg)
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('email')}");
-
-    $form->addText("firstName", "First name")
-      ->setRequired($requiredMsg)
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('firstname')}");
-
-    $form->addText("middleName", "Middle name")
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('middlename')}");
-
-    $form->addText("lastName", "Last name")
-      ->setRequired($requiredMsg)
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('lastname')}");
-
-    $form->addPassword('password', 'Password')
-      ->setRequired($requiredMsg)
-      ->addRule($form::MinLength, $this->t('passMinLength') . ': ' . self::MIN_PASS_LENGTH, self::MIN_PASS_LENGTH)
-      ->addRule($form::Pattern, $this->t('passRequirements'), '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$')
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$enter} {$this->t('password')}");
-
-    $confirm = ucfirst($this->t('confirm'));
-    $form->addPassword('passwordConfirm', 'Confirm password')
-      ->setRequired('Please confirm your password')
-      ->addRule($form::EQUAL, 'Password mismatch', $form['password'])
-      ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$confirm} {$this->t('password')}");
-
-    $form->addSubmit('register', $this->t('signup'))
-      ->setHtmlAttribute('class', 'btn btn-primary');
-
     $form->onSuccess[] = [$this, 'onSuccess'];
     return $form;
   }
@@ -111,9 +65,9 @@ final class RegisterPresenter extends BasePresenter
       $insert = [
         'username' => $data->username,
         'email' => $data->email,
-        'first_name' => $data->firstName,
-        'middle_name' => $data->middleName,
-        'last_name' => $data->lastName,
+        'first_name' => $data->first_name,
+        'middle_name' => $data->middle_name,
+        'last_name' => $data->last_name,
         'password' => $resPass
       ];
       $user = $this->userModel->insert($insert);

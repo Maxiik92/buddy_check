@@ -16,26 +16,26 @@
 </div>
 
 <div class="col-md-4">
-    <label class="form-label" n:name="firstName">{_"firstname"|firstUpper}</label>
-    <input n:name="firstName" id="firstName" class="form-control">
+    <label class="form-label" n:name="first_name">{_"firstname"|firstUpper}</label>
+    <input n:name="first_name" id="first_name" class="form-control">
     <div class="invalid-feedback error n:ifcontent">
-        {inputError firstName}
+        {inputError first_name}
     </div>
 </div>
 
 <div class="col-md-4">
-    <label class="form-label" n:name="middleName">{_"middlename"|firstUpper}</label>
-    <input n:name="middleName" id="middleName" class="form-control">
+    <label class="form-label" n:name="middle_name">{_"middlename"|firstUpper}</label>
+    <input n:name="middle_name" id="middle_name" class="form-control">
     <div class="invalid-feedback error n:ifcontent">
-        {inputError middleName}
+        {inputError middle_name}
     </div>
 </div>
 
 <div class="col-md-4">
-    <label class="form-label" n:name="lastName">{_"lastname"|firstUpper}</label>
-    <input n:name="lastName" id="lastName" class="form-control">
+    <label class="form-label" n:name="last_name">{_"lastname"|firstUpper}</label>
+    <input n:name="last_name" id="last_name" class="form-control">
     <div class="invalid-feedback error n:ifcontent">
-        {inputError lastName}
+        {inputError last_name}
     </div>
 </div>
 
@@ -64,4 +64,10 @@
     </div>
 </div>
 
-<button type="submit" class="col-md-4 btn btn-primary">{_"signup"|firstUpper}</button>
+<button type="submit" class="col-md-4 btn btn-primary">
+    {if !$presenter->isLinkCurrent(':User:register:default')}
+        {_"save"|firstUpper}
+    {else}
+        {_"signup"|firstUpper}
+    {/if}
+</button>
