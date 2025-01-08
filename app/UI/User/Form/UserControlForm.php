@@ -59,7 +59,9 @@ class UserControlFormFactory
       ->setRequired('Please confirm your password')
       ->addRule($form::EQUAL, 'Password mismatch', $form['password'])
       ->setHtmlAttribute('class', 'form-control')
-      ->setHtmlAttribute('placeholder', "{$confirm} {$this->translator->translate('password')}");
+      ->setHtmlAttribute('placeholder', "{$confirm} {$this->translator->translate('password')}")
+      ->addConditionOn($form['password'], $form::FILLED)
+      ->setRequired($this->translator->translate('confirmPassword'));
 
     $form->addSubmit('submit', $this->translator->translate('signup'))
       ->setHtmlAttribute('class', 'btn btn-primary');

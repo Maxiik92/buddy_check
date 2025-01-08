@@ -105,11 +105,6 @@ class ManipulatePresenter extends BasePresenter
     try {
       $update = [];
       unset($data->id);
-      if (!empty($data->password) && $data->password !== $data->passwordConfirm) {
-        $form->addError($this->t('passwordsDoNotMatch'));
-        $this->flashMessage($this->t('passwordsDoNotMatch'), 'danger');
-        $this->redirect('this');
-      }
       unset($data->passwordConfirm);
 
       foreach ($data as $item => $value) {
@@ -129,10 +124,8 @@ class ManipulatePresenter extends BasePresenter
         $this->userModel->updateByParam('id', $oldData->id, $update);
       }
       $this->flashMessage($this->t('updateSuccessfull'), 'success');
-      $this->redirect('this');
     } catch (Exception $e) {
       $this->flashMessage($this->t('failedToEditUser'), 'danger');
-      $this->redirect('this');
     }
   }
 

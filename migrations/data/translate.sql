@@ -50,4 +50,6 @@ INSERT INTO `translate` (`key`,`language`,`value`) VALUES
 ('save','sk','uložiť'),
 ('save','en','save'),
 ('userNotFound','sk','Používateľ nenájdený'),
-('userNotFound','en','User not Found');
+('userNotFound','en','User not Found'),
+('confirmPassword','sk','Potvrdťe heslo'),
+('confirmPassword','en','Confirm password');
